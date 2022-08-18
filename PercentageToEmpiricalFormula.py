@@ -1,8 +1,8 @@
 # PercentageToEmpiricalFormula.py
 #
 # This file was created by and modified by CyberedCake
-# Last Modified: November 9th, 2021 at 12:28PM ET
-# Version: 1.0
+# Last Modified: August 18th, 2022 at 9:44AM ET
+# Version: 1.1.1
 #
 # Please do not modify or distribute without first
 # acknowledging you did not create this and including
@@ -22,10 +22,6 @@
 import os, time, sys, math, subprocess
 from os.path import exists
 import urllib.request
-# import things
-
-# vvv Automatically installs PyAutoGui if not already installed
-# Note: This requires "depends.py" in the parent directory because that is how it was programmed
 import sys
 
 import pyautogui, requests
