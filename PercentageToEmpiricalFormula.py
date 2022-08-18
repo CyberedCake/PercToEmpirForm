@@ -1,8 +1,8 @@
 # PercentageToEmpiricalFormula.py
 #
 # This file was created by and modified by CyberedCake
-# Last Modified: August 18th, 2022 at 9:35AM ET
-# Version: 1.1
+# Last Modified: November 9th, 2021 at 12:28PM ET
+# Version: 1.0
 #
 # Please do not modify or distribute without first
 # acknowledging you did not create this and including
@@ -24,6 +24,8 @@ from os.path import exists
 import urllib.request
 # import things
 
+# vvv Automatically installs PyAutoGui if not already installed
+# Note: This requires "depends.py" in the parent directory because that is how it was programmed
 import sys
 
 import pyautogui, requests
@@ -124,6 +126,7 @@ def checkElements():
 checkElements()
     
 printF("&6PERCENTAGE TO EMPIRICAL/MOLECULAR FORMULA")
+printF("&c(No longer maintained)")
 printF(" ")
 printF("Please enter the percentage &7(without the % sign) &falong with the chemical formula in the following format:")
 printF("&a%element%=%grams%, %element 2%=%grams%")
