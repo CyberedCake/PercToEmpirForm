@@ -1,8 +1,8 @@
 # PercentageToEmpiricalFormula.py
 #
 # This file was created by and modified by CyberedCake
-# Last Modified: November 9th, 2021 at 12:28PM ET
-# Version: 1.0
+# Last Modified: August 18th, 2022 at 9:35AM ET
+# Version: 1.1
 #
 # Please do not modify or distribute without first
 # acknowledging you did not create this and including
@@ -19,41 +19,30 @@
 # Created by CyberedCake
 
 
-import os, time, sys, math, subprocess # import things
+import os, time, sys, math, subprocess
+from os.path import exists
+import urllib.request
+# import things
 
-# vvv Automatically installs PyAutoGui if not already installed
-pyautogui = False
-try:
-    import pyautogui as gui
-    pyautogui = True
-except:
-    os.system("title Downloading 'pyautogui'")
-    downloadDependencies = input("You need to download some OPTIONAL dependencies, would you like to download them? Y/N: ")
-    if(downloadDependencies.lower() == "n" or downloadDependencies.lower() == "no"):
-        print("Skipping installation of soft-dependent library...")
-    else:
-        print("Downloading and installing a soft-dependent library...")
-        print(" ")
-        print("Installing library: 'pyautogui'")
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
-'pyautogui'])
-        try:
-            import pyautogui as gui
-            print("pyautogui library import success! starting main program...")
-            pyautogui = True
-        except:
-            print(" ")
-            print("System failed to download soft-dependent libraries. Continuing without...")
-        
-        os.system("cls")
-        if(pyautogui == "true"):
-            print("System console cleared: Installed PYAUTOGUI")
-            print(" ")
+import sys
+
+import pyautogui, requests
+
+def supportsColor(): # Checks if the current console supports color
+    return True # Just going to make it return true until I can find an alternative
+    
+    #plat = sys.platform
+    #supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
+                                                 # 'ANSICON' in os.environ)
+    # isatty is not always implemented, #6223.
+    #is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+    #return supported_platform and is_a_tty
 
 os.system("color") #makes console colory :D
+os.system("title Percentage to Empirical Formula") # yay titlebars
 
 # yes i know this function code sucks but oh well it works and
-# the main reason it exist is because i'm used to minecraft
+# the main reason it exist is because i'm used3 to minecraft
 # color codes lol
 def printF(string):
     if(supportsColor() == True):
@@ -74,6 +63,9 @@ def printF(string):
         string = string.replace("&d", "\u001b[35;1m")
         string = string.replace("&e", "\u001b[33;1m")
         string = string.replace("&f", "\u001b[37;1m")
+        string = string.replace("&l", "\u001b[1m")
+        string = string.replace("&n", "\u001b[4m")
+        string = string.replace("&h", "\u001b[7m")
         string = string.replace("&r", "\u001b[0m")
         print(string + "\u001b[0m")
     else:
@@ -93,35 +85,62 @@ def printF(string):
         string = string.replace("&d", "")
         string = string.replace("&e", "")
         string = string.replace("&f", "")
+        string = string.replace("&l", "")
+        string = string.replace("&n", "")
+        string = string.replace("&h", "")
         string = string.replace("&r", "")
         print(string)
 
-def supportsColor(): # Checks if the current console supports color
-    return True # Just going to make it return true until I can find an alternative
-    
-    #plat = sys.platform
-    #supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
-                                                 # 'ANSICON' in os.environ)
-    # isatty is not always implemented, #6223.
-    #is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
-    #return supported_platform and is_a_tty
+alreadyHaveElements = exists('elements.txt')
+def checkElements():
+    if alreadyHaveElements == False:
+        print("Downloading 'elements.txt' (required)...")
+        url = "https://raw.githubusercontent.com/CyberedCake/PercToEmpirForm/master/elements.txt"
+        try:
+            request = requests.get(url)
 
-os.system("title Percentage to Empirical Formula") # yay titlebars
+            with open('elements.txt', 'wb') as file:
+                file.write(request.content)
+
+            print("Successfully downloaded 'elements.txt'... launching program!")
+            
+        except Exception as err:
+            exception = str(err)
+            button = "Close program"
+            if(pyautogui == True):
+                gui.alert("An error occurred: " + exception, "An exception occurred!", button)
+            printF("&cAn exception occurred: &8" + exception)
+            printF(" ")
+            alert = pyautogui.confirm(str(exception) + "\n\nCheck your connection or try again later.", "An exception occurred!", buttons=['Try again', 'Restart program', 'Close program'])
+            if(alert == "Try again"):
+                checkElements()
+                return
+            elif(alert == "Restart program"):
+                printF(" ")
+                printF("&aRebooting program, please wait...")
+                os.system("title Rebooting program, please wait...")
+                os.startfile(__file__)
+            exit()
+checkElements()
     
-printF("&6PERCENTAGE TO EMPIRICAL FORMULA")
+printF("&6PERCENTAGE TO EMPIRICAL/MOLECULAR FORMULA")
 printF(" ")
 printF("Please enter the percentage &7(without the % sign) &falong with the chemical formula in the following format:")
-printF("&a%element%=%percentage%, %element 2%=%percentage 2%")
-printF("&eEX: (carbon=50, oxygen=50)")
+printF("&a%element%=%grams%, %element 2%=%grams%")
+printF("&eEX: carbon=50, oxygen=50")
+printF("&7OR &a%element=%grams%, %element 2%=%grams, |%molecular mass%")
+printF("&eEX 2: carbon=50, oxygen=50, |28")
 printF(" ")
 
 # >>>    THIS IS THE PART WHERE I KINDA WISH IT WAS MORE EFFICIENT   <<<
 # >>> AND SOMETIMES I CAN'T EVEN UNDERSTAND MY OWN CODE, BUT OH WELL <<<
 def main():
+    printF(" ")
     ending = ""
     if(supportsColor() == True):
         ending = "\u001b[36;1m"
     format = input("Enter format: " + ending)
+    timing = epoch()
     printF("&r")
 
     if (format.strip() == ""):
@@ -130,21 +149,31 @@ def main():
         throwParseException("NO_EQUALS_FOUND")
     if not(", " in format):
         throwParseException("NO_COMMAS_FOUND")
-        
 
-    try:
-        file = open(os.path.dirname(sys.argv[0]) + "\elements.txt", mode='r+')
-    except Exception as err:
-        exception("File 'elements.txt' not present in current python script directory", "Restart program")
+    file = open('elements.txt', 'r')
 
-    elementsOnFile = file.readlines()
+    elementsOnFile = []
+    for line in file:
+        elementsOnFile.append(line)
+
     file.close()
 
     molarMasses = {}
 
-    elementsAndPercents = format.split(", ")
-    amount = 0
-    alreadyUsed = []
+    elementsAndPercents, amount, alreadyUsed = format.split(", "), 0, []
+
+    fourthStepInitiate, molecularMass = False, 0
+    for elementAndPercent in elementsAndPercents: # detect if element starts with |
+        if(elementAndPercent.startswith('|')):
+            inputtedMolecFormMass = elementAndPercent.replace("|", "")
+            if(isfloat(inputtedMolecFormMass) == False):
+                throwParseException("MOLEC_MASS_NOT_A_FLOAT")
+            inputMolFormMass = float(inputtedMolecFormMass)
+            if(inputMolFormMass <= 0):
+                throwParseException("MOLEC_MASS_TOO_SMALL")
+            fourthStepInitiate, molecularMass = True, inputMolFormMass
+            elementsAndPercents.remove(elementAndPercent)
+            break
     for elementAndPercent in elementsAndPercents:
         if(len(elementAndPercent.split("=")) <= 1):
             throwParseException("MISSING_ELEMENT_PERCENT_DEFINITION")
@@ -173,9 +202,6 @@ def main():
         if(float(inputtedNumber) >= 100 or float(inputtedNumber) <= 0):
             throwParseException("NUMBERS_TOO_LARGE_OR_TOO_SMALL")
         amount = amount + float(inputtedNumber)
-
-    if not(amount == 100):
-        throwParseException("NUMBER_DOES_NOT_ADD_TO_100")
         
     # FIRST STEP
     firstStep = {}
@@ -208,7 +234,7 @@ def main():
         minimumWorks = 0
         entered = False
         while(minimumWorks == 0):
-            for integer in range(1, 11):
+            for integer in range(1, 10):
                 allWork = True
                 for element in molarMasses.keys():
                     secondStepOutput = secondStep.get(element)
@@ -224,21 +250,52 @@ def main():
             break
         if(entered == True):
             for element in molarMasses.keys():
-                thirdStep[element] = secondStep.get(element) * minimumWorks
-        formatDict(thirdStep)
-        if(entered == False):
-            printF("&9[Number could not be multiplied by numbers up to 10]")
-        else:
-            printF("&9[These numbers are all multiplied by &ex" + str(minimumWorks) + "&9]")
-        printF(" ")
+                secondStep[element] = secondStep.get(element) * minimumWorks
+        if(fourthStepInitiate == False):
+            printF("&fEmpirical Formula: " + formatDict(secondStep))
+            if(entered == False):
+                printF("&f                   &9[Number &dcould not &9be multiplied by numbers up to &ex9&9]")
+            else:
+                printF("&f                   &9[These numbers are all multiplied by &ex" + str(minimumWorks) + "&9]")
+            timeDifference(timing)
+            main()
+    elif(fourthStepInitiate == False):
+        printF("&fEmpirical Formula: " + formatDict(secondStep))
+        timeDifference(timing)
         main()
-    elif(thirdStepInitiate == False):
-        formatDict(secondStep)
-        printF(" ")
+        
+    # FOURTH STEP
+    fourthStep = {}
+    if(fourthStepInitiate == True):
+        total = 0.0
+        for element in molarMasses.keys():
+            total = total + (float(molarMasses.get(element))*float(secondStep.get(element)))
+
+        multiplyBy = round(molecularMass/total)
+        for element in molarMasses.keys():
+            fourthStep[element] = multiplyBy * float(secondStep.get(element))
+
+        printF("&fEmpirical Formula: " + formatDict(secondStep))
+        printF("&fMolecular Formula: " + formatDict(fourthStep) + " &9x" + str(multiplyBy))
+        timeDifference(timing)
         main()
 
-    exception("Something went wrong, we could not determine the cause!", "Attempt to run program again")
+    printF("&9The worst kind of exceptions... unknown ones :(")
+    printF("&7Here may be some useful debug information and what we know:")
+    debug = {
+        "thirdStep": boolToString(thirdStepInitiate),
+        "fourthStep": boolToString(fourthStepInitiate),
+        "timeTakenMs": str(epoch() - timing)
+        }
+    printF(formatDict(debug))
+    exception("An unknown exception occurred and we could not trace the cause for it. Try again later!", "Try again")
 
+def timeDifference(time):
+    printF("&fIt took &b" + str(epoch() - time) + "&bms &fto complete the operation!")
+
+def epoch():
+    return round(time.time() * 1000)
+    
 def exception(exception, button):
     if(pyautogui == True):
         gui.alert(exception, "An exception occurred!", button)
@@ -249,11 +306,14 @@ def exception(exception, button):
 def throwParseException(why):
     exception("Could not parse your format correctly!\n(" + why + ")", "Restart program")
 
+def boolToString(boolean):
+    return "True" if boolean == True else "False"
+
 def formatDict(item): # (this could be done better, please message me if you find a way)
-    textFirst = "&c"
-    integerLast = "&e"
+    primary = "&c"
+    secondary = "&e"
     
-    item = str(item)
+    item = "&r" + str(item)
     split = item.split("'")
     active = False
     added = []
@@ -263,14 +323,16 @@ def formatDict(item): # (this could be done better, please message me if you fin
             added.append(substring + "&r")
         elif(active == False):
             active = True
-            added.append(substring + textFirst)
+            added.append(substring + primary)
 
     joined = ''.join(added)
     ints = [int(s) for s in joined if s.isdigit()]
     for integer in ints:
-        joined = joined.replace(str(integer), integerLast + str(integer) + "&r")
+        joined = joined.replace(str(integer), secondary + str(integer) + "&r")
+    joined = joined.lower().replace("true", secondary + "True")
+    joined = joined.lower().replace("false", secondary + "False")
     
-    printF(joined)
+    return joined
     #start = element.find("'") + 1
     #end = element.find("'")
     #substring = element[start:end]
@@ -282,4 +344,5 @@ def isfloat(value):
     except ValueError:
         return False
 
-main() # init
+if __name__ == "__main__":
+    main() # init
