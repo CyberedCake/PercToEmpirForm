@@ -1,8 +1,8 @@
 # PercentageToEmpiricalFormula.py
 #
 # This file was created by and modified by CyberedCake
-# Last Modified: August 18th, 2022 at 9:44AM ET
-# Version: 1.1.1
+# Last Modified: November 9th, 2021 at 12:28PM ET
+# Version: 1.0
 #
 # Please do not modify or distribute without first
 # acknowledging you did not create this and including
@@ -22,114 +22,128 @@
 import os, time, sys, math, subprocess
 from os.path import exists
 import urllib.request
+# import things
+
+# vvv Automatically installs PyAutoGui if not already installed
+# Note: This requires "depends.py" in the parent directory because that is how it was programmed
 import sys
 
 import pyautogui, requests
 
-def supportsColor(): # Checks if the current console supports color
-    return True # Just going to make it return true until I can find an alternative
-    
-    #plat = sys.platform
-    #supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
-                                                 # 'ANSICON' in os.environ)
-    # isatty is not always implemented, #6223.
-    #is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
-    #return supported_platform and is_a_tty
+def setup():
+    global supportsColor
+    def supportsColor(): # Checks if the current console supports color
+        return True # Just going to make it return true until I can find an alternative
+        
+        #plat = sys.platform
+        #supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
+                                                     # 'ANSICON' in os.environ)
+        # isatty is not always implemented, #6223.
+        #is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+        #return supported_platform and is_a_tty
 
-os.system("color") #makes console colory :D
-os.system("title Percentage to Empirical Formula") # yay titlebars
+    os.system("color") #makes console colory :D
+    os.system("title Percentage to Empirical Formula") # yay titlebars
 
-# yes i know this function code sucks but oh well it works and
-# the main reason it exist is because i'm used3 to minecraft
-# color codes lol
-def printF(string):
-    if(supportsColor() == True):
-        string = str(string)
-        string = string.replace("&0", "\u001b[30m")
-        string = string.replace("&1", "\u001b[34m")
-        string = string.replace("&2", "\u001b[32m")
-        string = string.replace("&3", "\u001b[36m")
-        string = string.replace("&4", "\u001b[31m")
-        string = string.replace("&5", "\u001b[35m")
-        string = string.replace("&6", "\u001b[33m")
-        string = string.replace("&7", "\u001b[37m")
-        string = string.replace("&8", "\u001b[30;1m")
-        string = string.replace("&9", "\u001b[34;1m")
-        string = string.replace("&a", "\u001b[32;1m")
-        string = string.replace("&b", "\u001b[36;1m")
-        string = string.replace("&c", "\u001b[31;1m")
-        string = string.replace("&d", "\u001b[35;1m")
-        string = string.replace("&e", "\u001b[33;1m")
-        string = string.replace("&f", "\u001b[37;1m")
-        string = string.replace("&l", "\u001b[1m")
-        string = string.replace("&n", "\u001b[4m")
-        string = string.replace("&h", "\u001b[7m")
-        string = string.replace("&r", "\u001b[0m")
-        print(string + "\u001b[0m")
-    else:
-        string = string.replace("&0", "")
-        string = string.replace("&1", "")
-        string = string.replace("&2", "")
-        string = string.replace("&3", "")
-        string = string.replace("&4", "")
-        string = string.replace("&5", "")
-        string = string.replace("&6", "")
-        string = string.replace("&7", "")
-        string = string.replace("&8", "")
-        string = string.replace("&9", "")
-        string = string.replace("&a", "")
-        string = string.replace("&b", "")
-        string = string.replace("&c", "")
-        string = string.replace("&d", "")
-        string = string.replace("&e", "")
-        string = string.replace("&f", "")
-        string = string.replace("&l", "")
-        string = string.replace("&n", "")
-        string = string.replace("&h", "")
-        string = string.replace("&r", "")
-        print(string)
+    # yes i know this function code sucks but oh well it works and
+    # the main reason it exist is because i'm used3 to minecraft
+    # color codes lol
+    global printF
+    def printF(string):
+        if(supportsColor() == True):
+            string = str(string)
+            string = string.replace("&0", "\u001b[30m")
+            string = string.replace("&1", "\u001b[34m")
+            string = string.replace("&2", "\u001b[32m")
+            string = string.replace("&3", "\u001b[36m")
+            string = string.replace("&4", "\u001b[31m")
+            string = string.replace("&5", "\u001b[35m")
+            string = string.replace("&6", "\u001b[33m")
+            string = string.replace("&7", "\u001b[37m")
+            string = string.replace("&8", "\u001b[30;1m")
+            string = string.replace("&9", "\u001b[34;1m")
+            string = string.replace("&a", "\u001b[32;1m")
+            string = string.replace("&b", "\u001b[36;1m")
+            string = string.replace("&c", "\u001b[31;1m")
+            string = string.replace("&d", "\u001b[35;1m")
+            string = string.replace("&e", "\u001b[33;1m")
+            string = string.replace("&f", "\u001b[37;1m")
+            string = string.replace("&l", "\u001b[1m")
+            string = string.replace("&n", "\u001b[4m")
+            string = string.replace("&h", "\u001b[7m")
+            string = string.replace("&r", "\u001b[0m")
+            print(string + "\u001b[0m")
+        else:
+            string = string.replace("&0", "")
+            string = string.replace("&1", "")
+            string = string.replace("&2", "")
+            string = string.replace("&3", "")
+            string = string.replace("&4", "")
+            string = string.replace("&5", "")
+            string = string.replace("&6", "")
+            string = string.replace("&7", "")
+            string = string.replace("&8", "")
+            string = string.replace("&9", "")
+            string = string.replace("&a", "")
+            string = string.replace("&b", "")
+            string = string.replace("&c", "")
+            string = string.replace("&d", "")
+            string = string.replace("&e", "")
+            string = string.replace("&f", "")
+            string = string.replace("&l", "")
+            string = string.replace("&n", "")
+            string = string.replace("&h", "")
+            string = string.replace("&r", "")
+            print(string)
 
-alreadyHaveElements = exists('elements.txt')
-def checkElements():
-    if alreadyHaveElements == False:
-        print("Downloading 'elements.txt' (required)...")
-        url = "https://raw.githubusercontent.com/CyberedCake/PercToEmpirForm/master/elements.txt"
-        try:
-            request = requests.get(url)
+    alreadyHaveElements = exists('elements.txt')
+    import webbrowser as browser
+    def checkElements():
+        if alreadyHaveElements == False:
+            print("Downloading 'elements.txt' (required)...")
+            url = "https://raw.githubusercontent.com/CyberedCake/PercToEmpirForm/main/elements.txt"
+            try:
+                request = requests.get(url)
 
-            with open('elements.txt', 'wb') as file:
-                file.write(request.content)
+                with open('elements.txt', 'wb') as file:
+                    file.write(request.content)
 
-            print("Successfully downloaded 'elements.txt'... launching program!")
-            
-        except Exception as err:
-            exception = str(err)
-            button = "Close program"
-            if(pyautogui == True):
-                gui.alert("An error occurred: " + exception, "An exception occurred!", button)
-            printF("&cAn exception occurred: &8" + exception)
-            printF(" ")
-            alert = pyautogui.confirm(str(exception) + "\n\nCheck your connection or try again later.", "An exception occurred!", buttons=['Try again', 'Restart program', 'Close program'])
-            if(alert == "Try again"):
-                checkElements()
-                return
-            elif(alert == "Restart program"):
+                print("Successfully downloaded 'elements.txt'... launching program!")
+                
+            except Exception as err:
+                exception = str(err)
+                button = "Close program"
+                if(pyautogui == True):
+                    gui.alert("An error occurred: " + exception, "An exception occurred!", button)
+                printF("&cAn exception occurred: &8" + exception)
                 printF(" ")
-                printF("&aRebooting program, please wait...")
-                os.system("title Rebooting program, please wait...")
-                os.startfile(__file__)
-            exit()
-checkElements()
-    
-printF("&6PERCENTAGE TO EMPIRICAL/MOLECULAR FORMULA")
-printF("&c(No longer maintained)")
-printF(" ")
-printF("Please enter the percentage &7(without the % sign) &falong with the chemical formula in the following format:")
-printF("&a%element%=%grams%, %element 2%=%grams%")
-printF("&eEX: carbon=50, oxygen=50")
-printF("&7OR &a%element=%grams%, %element 2%=%grams, |%molecular mass%")
-printF("&eEX 2: carbon=50, oxygen=50, |28")
-printF(" ")
+                alert = pyautogui.confirm(str(exception) + "\n\nCheck your connection or try again later.\n\nSelect an option for what the program should do next:", "An exception occurred!", buttons=['Try again', 'Download manually', 'Restart program', 'Close program'])
+                if(alert == "Try again"):
+                    checkElements()
+                    return
+                elif(alert == "Restart program"):
+                    printF(" ")
+                    printF("&aRebooting program, please wait...")
+                    os.system("title Rebooting program, please wait...")
+                    os.startfile(__file__)
+                elif(alert == "Download manually"):
+                    browser.open("https://github.com/CyberedCake/PercToEmpirForm/tree/main/elements")
+                    printF(" ")
+                    printF("&aOpening web browser...")
+                    time.sleep(5)
+                    checkElements()
+                    return
+                exit()
+    checkElements()
+        
+    printF("&6PERCENTAGE TO EMPIRICAL/MOLECULAR FORMULA")
+    printF(" ")
+    printF("Please enter the percentage &7(without the % sign) &falong with the chemical formula in the following format:")
+    printF("&a%element%=%grams%, %element 2%=%grams%")
+    printF("&eEX: carbon=50, oxygen=50")
+    printF("&7OR &a%element=%grams%, %element 2%=%grams, |%molecular mass%")
+    printF("&eEX 2: carbon=50, oxygen=50, |28")
+    printF(" ")
 
 # >>>    THIS IS THE PART WHERE I KINDA WISH IT WAS MORE EFFICIENT   <<<
 # >>> AND SOMETIMES I CAN'T EVEN UNDERSTAND MY OWN CODE, BUT OH WELL <<<
@@ -344,4 +358,15 @@ def isfloat(value):
         return False
 
 if __name__ == "__main__":
-    main() # init
+    def execute():
+        try:
+            setup() # setup
+            main() # init
+        except Exception as err:
+            printF("&b---------------------------------------------------------")
+            printF("&cA fatal exception occurred within the program, going to restart!")
+            printF("&8" + str(err))
+            printF("&7Please contact a developer if this error persists.")
+            printF("&b---------------------------------------------------------")
+            execute()
+    execute()
